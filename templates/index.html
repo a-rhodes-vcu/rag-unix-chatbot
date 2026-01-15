@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+    /* Chat containers */
+    .container {
+        background-color: #f1f1f1;
+        margin: auto;
+        width: 20%;
+        padding: 10px;
+        text-align: left;
+    }
+
+/* Darker chat container */
+    .darker {
+        border-color: #ccc;
+        background-color: #ddd;
+        margin: auto;
+        width: 20%;
+        padding: 10px;
+        text-align: right;
+    }
+    .bot_header{
+        border-color: #ccc;
+        background-color: #ddd;
+        margin: auto;
+        width: 30%;
+        padding: 10px;
+        text-align: center;
+
+    }
+    input[type=text]
+    {
+        width:100%;
+        border:2px solid #0b8043;
+        border-radius: 4px;
+        margin: auto;
+        outline: none;
+        box-sizing: border-box;
+        text-overflow: ellipsis;
+    }
+
+
+
+
+</style>
+<body>
+    <h1 class = "bot_header">Unix Chatbot</h1>
+<div>
+    <div id="chatbox">
+        <p class = "bot_header"><span>echo $?</span></p>
+        <br>
+    </div>
+    <div id="userInput" class="container darker">
+
+
+  <input id="textInput" type="text" placeholder="message" name="msg">
+        <input id="buttonInput" value="Send" type="submit">
+    </div>
+
+<script>
+    function getBotResponse() {
+        var rawText = $("#textInput").val();
+        var userHtml = '<p class="container darker"><span>' + rawText + '</span></p>';
+        $("#textInput").val("");
+        $("#chatbox").append(userHtml);
+        document.getElementById("userInput").scrollIntoView({block: 'start',behavior:'smooth'});
+        $.get("/get", {msg:rawText}).done(function (res) {
+            var botHTML='<p class="container"><span><code>' + res + '</code></span><p>';
+        $("#chatbox").append(botHTML);
+        document.getElementById('userInput').scrollIntoView({block:'start',behavior:'smooth'});
+        });
+
+    }
+    $("#textInput").keypress(function(e) {
+        if (e.which == 13) {
+            getBotResponse();
+        }
+    });
+    $("#buttonInput").click(function () {
+        getBotResponse();
+
+    });
+</script>
+</div>
+</body>
+</html>
